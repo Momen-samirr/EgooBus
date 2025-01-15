@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-export default function CancelReservationRoute({
-  params,
-}: {
+interface PageProps {
   params: { id: string };
-}) {
+}
+
+export default function CancelReservationRoute({ params }: PageProps) {
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card>
