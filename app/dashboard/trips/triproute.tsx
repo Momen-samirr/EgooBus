@@ -48,13 +48,8 @@ type Trip = {
   };
 };
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-export default function TripsRoute({ user }: { user: User }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function TripsRoute({ user }: { user: any }) {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({
