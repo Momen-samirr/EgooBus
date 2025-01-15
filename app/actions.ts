@@ -44,7 +44,7 @@ export default async function createProduct(
   return redirect("/dashboard/products");
 }
 
-export async function editProduct(prevState: any, formData: FormData) {
+export async function editProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
 
   const user = await getUser();
@@ -103,7 +103,7 @@ export async function deleteProduct(fromData: FormData) {
   return redirect("/dashboard/products");
 }
 
-export async function createBanner(prevState: any, formData: FormData) {
+export async function createBanner(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
 
   const user = await getUser();

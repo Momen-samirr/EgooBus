@@ -48,7 +48,13 @@ type Trip = {
   };
 };
 
-export default function TripsRoute({ user }: { user: any }) {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export default function TripsRoute({ user }: { user: User }) {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({
