@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String @id @unique
+  email           String
+  firstName       String
+  lastName        String
+  profileImage    String
+  trips   Trip[]
+  createAt        DateTime @default(now())
+}
+
+model Product {
+  id              String @id @default(uuid())
+  name            String @default("")
+  description     String
+  price           Int
+  images          String[]
+  status          stuatusEnum
+  category        categoryEnum
+  isFeatured      Boolean @default(false)
+  createAt        DateTime @default(now())
+}
+
+model Trip {
+  id       String  @id @default(uuid())
+  title    String
+  type     tripTypeEnum
+  status   tripStatusEnum @default(Available)
+  date     DateTime
+  time     String
+  User     User   @relation(fields: [userId], references: [id])
+  userId   String @default("")
+  createdAt DateTime @default(now())
+}
+
+
+model Banner {
+  id              String @id @default(uuid())
+  title           String
+  imageString     String
+  createdAt       DateTime @default(now())
+}
+
+enum stuatusEnum {
+  draft
+  publish
+  archived
+}
+
+enum categoryEnum {
+  woman
+  man
+  kid
+}
+
+enum tripTypeEnum {
+  Attendance
+  Departure
+}
+
+enum tripStatusEnum {
+  Available
+  Reserved
+}
