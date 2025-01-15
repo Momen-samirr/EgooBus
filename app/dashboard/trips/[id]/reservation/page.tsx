@@ -10,29 +10,40 @@ import {
 import Link from "next/link";
 
 interface PageProps {
-  params: { id: string };
+  params: { id: string } | Promise<{ id: string }>;
 }
 
 export default function ReservationRoute({ params }: PageProps) {
+  let tripId = "";
+
+  // Handle both synchronous and Promise-based params
+  if (params instanceof Promise) {
+    params.then((resolvedParams) => {
+      tripId = resolvedParams.id;
+    });
+  } else {
+    tripId = params.id;
+  }
+
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card>
         <CardHeader>
-          <CardTitle>Are you want to reserve this trip</CardTitle>
+          <CardTitle>Are you sure you want to reserve this trip?</CardTitle>
           <CardDescription>
-            This action Will permanently reserve this trip
+            This action will permanently reserve this trip.
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-between">
           <div className="flex flex-col gap-3">
             <Link href={"/dashboard/trips"}>
-              <SubmitButtons text="Cancel" variant={"outline"} />
+              <SubmitButtons text="Cancel" variant="outline" />
             </Link>
           </div>
           <div className="flex flex-col gap-3">
             <form action={reserveTrip}>
-              <input type="hidden" name="tripId" value={params.id} />
-              <SubmitButtons text="Reserve" variant={"default"} />
+              <input type="hidden" name="tripId" value={tripId} />
+              <SubmitButtons text="Reserve" variant="default" />
             </form>
           </div>
         </CardFooter>

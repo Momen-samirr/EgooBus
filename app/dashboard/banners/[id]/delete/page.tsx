@@ -10,17 +10,28 @@ import {
 import Link from "next/link";
 
 interface PageProps {
-  params: { id: string };
+  params: { id: string } | Promise<{ id: string }>;
 }
 
 export default function DeleteBannerRoute({ params }: PageProps) {
+  let bannerId = "";
+
+  // Handle both synchronous and Promise-based params
+  if (params instanceof Promise) {
+    params.then((resolvedParams) => {
+      bannerId = resolvedParams.id;
+    });
+  } else {
+    bannerId = params.id;
+  }
+
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card>
         <CardHeader>
           <CardTitle>Are you sure you want to delete this banner?</CardTitle>
           <CardDescription>
-            This action Will permanently delete this banner
+            This action will permanently delete this banner
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-between">
@@ -31,7 +42,7 @@ export default function DeleteBannerRoute({ params }: PageProps) {
           </div>
           <div className="flex items-center gap-5">
             <form action={deleteBanner}>
-              <input type="hidden" name="bannerId" value={params.id} />
+              <input type="hidden" name="bannerId" value={bannerId} />
               <SubmitButtons text="Delete" variant={"destructive"} />
             </form>
           </div>
