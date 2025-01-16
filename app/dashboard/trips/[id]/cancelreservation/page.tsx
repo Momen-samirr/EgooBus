@@ -10,19 +10,21 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
+// Define the props type
 interface PageProps {
-  params: { id: string }; // Automatically injected by the App Router
+  params: { id: string }; // params object injected by the App Router
 }
 
-// This function is now asynchronous because it's a server component
+// This is an async server component
 export default async function CancelReservationRoute({ params }: PageProps) {
-  const tripId = params.id;
+  const tripId = params.id; // Extract trip ID from the params
 
-  // Fetch trip details from the database (if needed)
+  // Fetch trip details from the database (optional, for validation)
   const trip = await prisma.trip.findUnique({
     where: { id: tripId },
   });
 
+  // If the trip doesn't exist, show a "not found" message
   if (!trip) {
     return (
       <div className="h-[80vh] w-full flex items-center justify-center">
@@ -30,7 +32,8 @@ export default async function CancelReservationRoute({ params }: PageProps) {
           <CardHeader>
             <CardTitle>Trip Not Found</CardTitle>
             <CardDescription>
-              We couldn’t find the trip you’re trying to cancel.
+              We couldn’t find the trip you’re trying to cancel. Please check
+              the URL and try again.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -38,6 +41,7 @@ export default async function CancelReservationRoute({ params }: PageProps) {
     );
   }
 
+  // Render the cancellation confirmation page
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card>
@@ -46,17 +50,22 @@ export default async function CancelReservationRoute({ params }: PageProps) {
             Are you sure you want to cancel this reservation?
           </CardTitle>
           <CardDescription>
-            This action will permanently cancel this reservation.
+            This action will permanently cancel this reservation. This cannot be
+            undone.
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-between">
+          {/* Back to Dashboard button */}
           <div className="flex flex-col gap-3">
             <Link href={"/dashboard/trips"}>
               <SubmitButtons text="Back to Dashboard" variant="outline" />
             </Link>
           </div>
+
+          {/* Cancel Reservation form */}
           <div className="flex flex-col gap-3">
             <form action={cancelReservation}>
+              {/* Hidden input to pass the trip ID */}
               <input type="hidden" name="tripId" value={tripId} />
               <SubmitButtons text="Cancel Reservation" variant="destructive" />
             </form>
