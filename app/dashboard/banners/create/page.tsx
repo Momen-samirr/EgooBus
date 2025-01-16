@@ -36,6 +36,12 @@ export default function CreateBannerRoute() {
     shouldRevalidate: "onInput",
   });
 
+  // Ensure fields are properly initialized
+  if (!fileds.imageString || !fileds.title) {
+    console.error("Form fields are not properly initialized:", fileds);
+    return <div>Error loading form fields.</div>;
+  }
+
   return (
     <>
       <form id={form.id} onSubmit={form.onSubmit} action={action}>
@@ -65,7 +71,7 @@ export default function CreateBannerRoute() {
                   placeholder="Enter title"
                   key={fileds.title.key}
                   name={fileds.title.name}
-                  defaultValue={fileds.title.initialValue}
+                  defaultValue={fileds.title.initialValue || ""}
                 />
                 <p className="text-red-500">{fileds.title.errors}</p>
               </div>
@@ -73,26 +79,32 @@ export default function CreateBannerRoute() {
                 <Label>Image</Label>
                 <input
                   type="hidden"
-                  value={image}
+                  value={image || ""}
                   key={fileds.imageString.key}
                   name={fileds.imageString.name}
-                  defaultValue={fileds.imageString.initialValue as string}
+                  defaultValue={
+                    (fileds.imageString.initialValue as string) || ""
+                  }
                 />
-                {image !== undefined ? (
+                {image ? (
                   <div className="flex items-center gap-5">
                     <Image
                       src={image}
                       alt="image"
                       width={200}
                       height={200}
-                      className=" w-[200px] h-[200px] rounded-md"
+                      className="w-[200px] h-[200px] rounded-md"
                     />
                   </div>
                 ) : (
                   <UploadButton
                     endpoint={"imageUploader"}
                     onClientUploadComplete={(res) => {
-                      setImage(res[0].url);
+                      if (res && res[0]?.url) {
+                        setImage(res[0].url);
+                      } else {
+                        console.error("Upload result is invalid:", res);
+                      }
                     }}
                     onUploadError={(error: Error) => {
                       console.error(error);
