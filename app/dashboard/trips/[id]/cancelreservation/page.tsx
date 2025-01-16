@@ -10,12 +10,11 @@ import {
 import Link from "next/link";
 
 interface PageProps {
-  params: { id: string }; // Ensure params is synchronous
+  params: { id: string }; // Make params synchronous
 }
 
-export default async function CancelReservationRoute({ params }: PageProps) {
-  // Resolve the trip ID directly if async logic is needed
-  const tripId = params.id;
+export default function CancelReservationRoute({ params }: PageProps) {
+  const tripId = params.id; // Directly access id from params
 
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
