@@ -1,3 +1,6 @@
+"use client";
+
+import { use } from "react";
 import { cancelReservation } from "@/app/actions";
 import SubmitButtons from "@/app/components/dashboard/submitButtons";
 import prisma from "@/app/lib/db";
@@ -10,19 +13,14 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-type paramsType = Promise<{ id: string }>;
+type Params = Promise<{ id: string }>;
 
-export default async function CancelReservationRoute({
-  params,
-}: {
-  params: paramsType;
-}) {
-  const { id: tripId } = await params; // Extract trip ID from the resolved promise
+export default function CancelReservationRoute(props: { params: Params }) {
+  const params = use(props.params); // Resolve the async params
+  const tripId = params.id; // Extract the trip ID
 
-  // Fetch trip details from the database (optional, for validation)
-  const trip = await prisma.trip.findUnique({
-    where: { id: tripId },
-  });
+  // Fetch trip details (optional, for validation)
+  const trip = use(prisma.trip.findUnique({ where: { id: tripId } })); // Fetch trip asynchronously
 
   // If the trip doesn't exist, show a "not found" message
   if (!trip) {
