@@ -28,5 +28,9 @@ export const GET = async () => {
     });
   }
 
-  return NextResponse.redirect("http://localhost:3000/dashboard");
+  return NextResponse.redirect(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000/"
+      : "https://egoo-bus.vercel.app"
+  );
 };
