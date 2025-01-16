@@ -10,10 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  getKindeServerSession,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/server";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 export default async function DashboardLayout({
@@ -21,10 +18,6 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { getUser } = getKindeServerSession();
-
-  const user = await getUser();
-
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
       <header className="sticky top-0 h-16 gap-6 flex items-center justify-between bg-white border-b">
@@ -56,7 +49,7 @@ export default async function DashboardLayout({
               <Avatar>
                 <AvatarImage
                   className="w-full h-full rounded-full object-cover"
-                  src={user.picture ?? "https://avatar.iran.liara.run/public/7"}
+                  src={"https://avatar.iran.liara.run/public/7"}
                   alt="Image"
                 />
               </Avatar>
