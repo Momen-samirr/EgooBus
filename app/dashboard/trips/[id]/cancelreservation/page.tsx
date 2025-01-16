@@ -10,12 +10,11 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-// Define the props type
+// Define the props type for the async function
 interface PageProps {
   params: { id: string }; // params object injected by the App Router
 }
 
-// This is an async server component
 export default async function CancelReservationRoute({ params }: PageProps) {
   const tripId = params.id; // Extract trip ID from the params
 
