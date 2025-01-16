@@ -32,6 +32,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+export const dynamic = "force-dynamic"; // Ensure dynamic rendering
+
 type Trip = {
   id: string;
   title: string;
