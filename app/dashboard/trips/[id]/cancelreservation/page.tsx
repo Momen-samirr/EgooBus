@@ -3,7 +3,6 @@
 import { use } from "react";
 import { cancelReservation } from "@/app/actions";
 import SubmitButtons from "@/app/components/dashboard/submitButtons";
-import prisma from "@/app/lib/db";
 import {
   Card,
   CardDescription,
@@ -18,27 +17,6 @@ type Params = Promise<{ id: string }>;
 export default function CancelReservationRoute(props: { params: Params }) {
   const params = use(props.params); // Resolve the async params
   const tripId = params.id; // Extract the trip ID
-
-  // Fetch trip details (optional, for validation)
-  const trip = use(prisma.trip.findUnique({ where: { id: tripId } })); // Fetch trip asynchronously
-
-  // If the trip doesn't exist, show a "not found" message
-  if (!trip) {
-    return (
-      <div className="h-[80vh] w-full flex items-center justify-center">
-        <Card>
-          <CardHeader>
-            <CardTitle>Trip Not Found</CardTitle>
-            <CardDescription>
-              We couldn’t find the trip you’re trying to cancel. Please check
-              the URL and try again.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
-
   // Render the cancellation confirmation page
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">

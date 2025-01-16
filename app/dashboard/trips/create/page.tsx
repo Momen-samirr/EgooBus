@@ -1,6 +1,6 @@
 "use client";
 
-import { createTrip } from "@/app/actions";
+import { createTrip } from "@/app/actions"; // Adjust path if necessary
 import SubmitButtons from "@/app/components/dashboard/submitButtons";
 import { tripSchema } from "@/app/lib/zodSchema";
 import { Button } from "@/components/ui/button";
