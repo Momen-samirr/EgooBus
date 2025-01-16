@@ -82,9 +82,6 @@ export default function CreateBannerRoute() {
                   value={image || ""}
                   key={fileds.imageString.key}
                   name={fileds.imageString.name}
-                  defaultValue={
-                    (fileds.imageString.initialValue as string) || ""
-                  }
                 />
                 {image ? (
                   <div className="flex items-center gap-5">
