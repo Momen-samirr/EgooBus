@@ -27,17 +27,14 @@ import { MoreHorizontalIcon, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const getBannerData = async () => {
-  const res = await prisma.banner.findMany({
+export default async function BannersPage() {
+  // Fetch data directly within the component
+  const data = await prisma.banner.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
-  return res;
-};
 
-export default async function BannersPage() {
-  const data = await getBannerData();
   return (
     <>
       <div className="flex items-center justify-end">
