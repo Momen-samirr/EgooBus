@@ -8,13 +8,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
 
 interface PageProps {
-  params: { id: string }; // Make params synchronous
+  params: { id: string };
 }
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.params!; // Extract the trip ID from params
+  return {
+    props: {
+      params: { id },
+    },
+  };
+};
+
 export default function CancelReservationRoute({ params }: PageProps) {
-  const tripId = params.id; // Directly access id from params
+  const tripId = params.id;
 
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
