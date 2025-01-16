@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 type Params = Promise<{ id: string }>;
 
@@ -18,6 +19,7 @@ export default function CancelReservationRoute(props: { params: Params }) {
   const params = use(props.params); // Resolve the async params
   const tripId = params.id; // Extract the trip ID
   // Render the cancellation confirmation page
+  const { toast } = useToast();
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card>
@@ -43,7 +45,16 @@ export default function CancelReservationRoute(props: { params: Params }) {
             <form action={cancelReservation}>
               {/* Hidden input to pass the trip ID */}
               <input type="hidden" name="tripId" value={tripId} />
-              <SubmitButtons text="Cancel Reservation" variant="destructive" />
+              <SubmitButtons
+                text="Cancel Reservation"
+                variant="destructive"
+                onClick={() => {
+                  toast({
+                    title: "Trip Canceld",
+                    description: "You have successfully Canceld this trip.",
+                  });
+                }}
+              />
             </form>
           </div>
         </CardFooter>

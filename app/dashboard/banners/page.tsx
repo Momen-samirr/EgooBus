@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { MoreHorizontalIcon, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,17 +35,21 @@ export default async function BannersPage() {
       createdAt: "desc",
     },
   });
+  const { getUser } = getKindeServerSession();
 
+  const user = await getUser();
   return (
     <>
-      <div className="flex items-center justify-end">
-        <Button asChild>
-          <Link href={"/dashboard/banners/create"}>
-            <PlusCircle className="size-5" />
-            <span>Create Banner</span>
-          </Link>
-        </Button>
-      </div>
+      {user?.email === "mow78433@gmail.com" && (
+        <div className="flex items-center justify-end">
+          <Button asChild>
+            <Link href={"/dashboard/banners/create"}>
+              <PlusCircle className="size-5" />
+              <span>Create Banner</span>
+            </Link>
+          </Button>
+        </div>
+      )}
       <Card className="mt-5">
         <CardHeader>
           <CardTitle>Banners Page</CardTitle>
@@ -82,11 +87,15 @@ export default async function BannersPage() {
                       <DropdownMenuContent>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/banners/${banner.id}/delete`}>
-                            Delete
-                          </Link>
-                        </DropdownMenuItem>
+                        {user?.email === "mow78433@gmail.com" && (
+                          <DropdownMenuItem asChild>
+                            <Link
+                              href={`/dashboard/banners/${banner.id}/delete`}
+                            >
+                              Delete
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

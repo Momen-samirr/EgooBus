@@ -11,12 +11,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 type Params = Promise<{ id: string }>;
 
 export default function ReservationRoute({ params }: { params: Params }) {
   const resolvedParams = use(params); // Resolve the async params
   const tripId = resolvedParams.id; // Extract the trip ID
+  const { toast } = useToast();
 
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
@@ -39,7 +41,16 @@ export default function ReservationRoute({ params }: { params: Params }) {
           <div className="flex flex-col gap-3">
             <form action={reserveTrip}>
               <input type="hidden" name="tripId" value={tripId} />
-              <SubmitButtons text="Reserve" variant="default" />
+              <SubmitButtons
+                text="Reserve"
+                variant="default"
+                onClick={() => {
+                  toast({
+                    title: "Trip Reserved",
+                    description: "You have successfully reserved this trip.",
+                  });
+                }}
+              />
             </form>
           </div>
         </CardFooter>

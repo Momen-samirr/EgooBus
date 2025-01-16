@@ -10,14 +10,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
+import {
+  getKindeServerSession,
+  LogoutLink,
+} from "@kinde-oss/kinde-auth-nextjs/server";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  if (!user || user === null || !user.id) {
+    return redirect(
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/"
+        : "https://egoo-bus.vercel.app"
+    );
+  }
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
       <header className="sticky top-0 h-16 gap-6 flex items-center justify-between bg-white border-b">

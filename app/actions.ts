@@ -290,3 +290,24 @@ export async function cancelReservation(formData: FormData) {
 
   return redirect("/dashboard/trips");
 }
+
+export async function deleteAllTrips() {
+  const { getUser } = getKindeServerSession();
+
+  const user = await getUser();
+
+  if (!user || user === null || !user.id) {
+    return redirect("/");
+  }
+
+  await prisma.trip.deleteMany({
+    where: {
+      userId: user.id,
+      AND: {
+        createdAt: {
+          gte: new Date(new Date().setDate(new Date().getDate() - 1)),
+        },
+      },
+    },
+  });
+}

@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 
 interface SubmitButtonProps {
   text: string;
+  onClick?: () => void;
   variant?:
     | "link"
     | "default"
@@ -17,17 +18,21 @@ interface SubmitButtonProps {
     | undefined;
 }
 
-export default function SubmitButtons({ text, variant }: SubmitButtonProps) {
+export default function SubmitButtons({
+  text,
+  variant,
+  onClick,
+}: SubmitButtonProps) {
   const { pending } = useFormStatus();
   return (
     <>
       {pending ? (
-        <Button type="submit" disabled>
+        <Button onClick={onClick} type="submit" disabled>
           <Loader2 className="mr-2 w-5 h-5 animate-spin" />
           Saving
         </Button>
       ) : (
-        <Button type="submit" variant={variant}>
+        <Button onClick={onClick} type="submit" variant={variant}>
           {text}
         </Button>
       )}

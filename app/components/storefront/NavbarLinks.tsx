@@ -21,11 +21,6 @@ export const links = [
     title: "Contact",
     href: "/contact-us",
   },
-  {
-    id: 4,
-    title: "Dashboard",
-    href: "/dashboard/",
-  },
 ];
 
 export function NavbarLinks() {

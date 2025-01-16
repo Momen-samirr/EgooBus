@@ -5,7 +5,7 @@ import {
   LoginLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/server";
-import { ShoppingBagIcon } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 import { UserDropdown } from "./UserDropdown";
 import { Button } from "@/components/ui/button";
 
@@ -26,12 +26,12 @@ export async function Navbar() {
         {user ? (
           <>
             <Link
-              href={"/bag"}
+              href={"/dashboard"}
               className=" relative group p-2 flex items-center mr-2"
             >
-              <ShoppingBagIcon className=" h-6 w-6 text-gray-400 group-hover:text-gray-500" />
-              <span className="absolute -top-2 right-1 text-xs bg-primary text-white w-4 h-4 flex items-center justify-center rounded-full p-2">
-                5
+              <LayoutDashboard className=" h-6 w-6 text-gray-400 group-hover:text-gray-500" />
+              <span className="absolute -top-3.5 right-1 text-xs bg-transparent text-primary w-6 h-6 flex items-center justify-center rounded-full p-2">
+                New
               </span>
             </Link>
             <UserDropdown

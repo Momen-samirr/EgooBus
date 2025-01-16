@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontalIcon, PlusCircle } from "lucide-react";
+import { MoreHorizontalIcon, PlusCircle, Trash2 } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -31,6 +31,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deleteAllTrips } from "@/app/actions";
+import SubmitButtons from "@/app/components/dashboard/submitButtons";
+import { useToast } from "@/hooks/use-toast";
 
 export const dynamic = "force-dynamic"; // Ensure dynamic rendering
 
@@ -61,6 +75,8 @@ export default function TripsRoute({ user }: { user: any }) {
     type: "",
     status: "",
   });
+
+  const { toast } = useToast();
 
   console.log("user", user);
 
@@ -112,13 +128,50 @@ export default function TripsRoute({ user }: { user: any }) {
   return (
     <>
       {user.email == "mow78433@gmail.com" && (
-        <div className="flex items-center justify-end">
-          <Button asChild>
-            <Link href={"/dashboard/trips/create"}>
-              <PlusCircle className="size-5" />
-              <span>Create Trip</span>
-            </Link>
-          </Button>
+        <div>
+          <div className="flex items-center justify-end">
+            <Button asChild>
+              <Link href={"/dashboard/trips/create"}>
+                <PlusCircle className="size-5" />
+                <span>Create Trip</span>
+              </Link>
+            </Button>
+          </div>
+          <div className="flex items-center text-right">
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Trash2 className="size-5 text-red-600 hover:text-red-800" />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction asChild>
+                    <form action={deleteAllTrips}>
+                      <input type="hidden" name="userId" value={user.id} />
+                      <SubmitButtons
+                        text="Delete all Trips"
+                        onClick={() => {
+                          toast({
+                            title: "Deleting all Trips",
+                            description:
+                              "This action cannot be undone. This will permanently delete your account and remove your data from our servers.",
+                            variant: "destructive",
+                          });
+                        }}
+                      />
+                    </form>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       )}
       {isLoading ? (
