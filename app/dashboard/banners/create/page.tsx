@@ -22,6 +22,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 
+export const dynamic = "force-dynamic"; // Ensure dynamic rendering
+
 export default function CreateBannerRoute() {
   const [image, setImage] = useState<string | undefined>(undefined);
   const [lastResult, action] = useActionState(createBanner, undefined);
@@ -36,87 +38,80 @@ export default function CreateBannerRoute() {
     shouldRevalidate: "onInput",
   });
 
-  // Ensure fields are properly initialized
-  if (!fileds.imageString || !fileds.title) {
-    console.error("Form fields are not properly initialized:", fileds);
+  if (!fileds) {
+    console.error("Form fields are not properly initialized");
     return <div>Error loading form fields.</div>;
   }
 
   return (
-    <>
-      <form id={form.id} onSubmit={form.onSubmit} action={action}>
-        <div className="flex items-center gap-5">
-          <Button variant={"outline"} size={"icon"} asChild>
-            <Link href={"/dashboard/banners"}>
-              <ChevronLeft className="size-5" />
-            </Link>
-          </Button>
-          <h1 className="text-xl font-semibold tracking-tight">
-            Create Banner
-          </h1>
-        </div>
-        <Card className="mt-5">
-          <CardHeader>
-            <CardTitle>Banner Form</CardTitle>
-            <CardDescription>
-              This is a form to create a new banner
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
-                <Label>Title</Label>
-                <Input
-                  type="text"
-                  placeholder="Enter title"
-                  key={fileds.title.key}
-                  name={fileds.title.name}
-                  defaultValue={fileds.title.initialValue || ""}
-                />
-                <p className="text-red-500">{fileds.title.errors}</p>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label>Image</Label>
-                <input
-                  type="hidden"
-                  value={image || ""}
-                  key={fileds.imageString.key}
-                  name={fileds.imageString.name}
-                />
-                {image ? (
-                  <div className="flex items-center gap-5">
-                    <Image
-                      src={image}
-                      alt="image"
-                      width={200}
-                      height={200}
-                      className="w-[200px] h-[200px] rounded-md"
-                    />
-                  </div>
-                ) : (
-                  <UploadButton
-                    endpoint={"imageUploader"}
-                    onClientUploadComplete={(res) => {
-                      if (res && res[0]?.url) {
-                        setImage(res[0].url);
-                      } else {
-                        console.error("Upload result is invalid:", res);
-                      }
-                    }}
-                    onUploadError={(error: Error) => {
-                      console.error(error);
-                    }}
-                  />
-                )}
-                <p className="text-red-500">{fileds.imageString.errors}</p>
-              </div>
+    <form id={form.id} onSubmit={form.onSubmit} action={action}>
+      <div className="flex items-center gap-5">
+        <Button variant={"outline"} size={"icon"} asChild>
+          <Link href={"/dashboard/banners"}>
+            <ChevronLeft className="size-5" />
+          </Link>
+        </Button>
+        <h1 className="text-xl font-semibold tracking-tight">Create Banner</h1>
+      </div>
+      <Card className="mt-5">
+        <CardHeader>
+          <CardTitle>Banner Form</CardTitle>
+          <CardDescription>
+            This is a form to create a new banner
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <Label>Title</Label>
+              <Input
+                type="text"
+                placeholder="Enter title"
+                key={fileds?.title?.key}
+                name={fileds?.title?.name}
+                defaultValue={fileds?.title?.initialValue || ""}
+              />
+              <p className="text-red-500">{fileds?.title?.errors}</p>
             </div>
-          </CardContent>
-          <CardFooter>
-            <SubmitButtons text="Create Banner" />
-          </CardFooter>
-        </Card>
-      </form>
-    </>
+            <div className="flex flex-col gap-3">
+              <Label>Image</Label>
+              <input
+                type="hidden"
+                value={image || ""}
+                key={fileds?.imageString?.key}
+                name={fileds?.imageString?.name}
+              />
+              {image ? (
+                <div className="flex items-center gap-5">
+                  <Image
+                    src={image}
+                    alt="image"
+                    width={200}
+                    height={200}
+                    className="w-[200px] h-[200px] rounded-md"
+                  />
+                </div>
+              ) : (
+                <UploadButton
+                  endpoint={"imageUploader"}
+                  onClientUploadComplete={(res) => {
+                    if (res && res[0]?.url) {
+                      setImage(res[0].url);
+                    }
+                  }}
+                  onUploadError={(error: Error) => {
+                    console.error(error);
+                  }}
+                />
+              )}
+              <p className="text-red-500">{fileds?.imageString?.errors}</p>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <SubmitButtons text="Create Banner" />
+        </CardFooter>
+      </Card>
+    </form>
   );
 }
