@@ -22,12 +22,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 
-export const dynamic = "force-dynamic"; // Ensure dynamic rendering
+export const dynamic = "force-dynamic"; // Prevents pre-rendering errors
 
 export default function CreateBannerRoute() {
   const [image, setImage] = useState<string | undefined>(undefined);
   const [lastResult, action] = useActionState(createBanner, undefined);
-  const [form, fileds] = useForm({
+
+  const [form, fields] = useForm({
     lastResult,
     onValidate: ({ formData }) => {
       return parseWithZod(formData, {
@@ -38,7 +39,7 @@ export default function CreateBannerRoute() {
     shouldRevalidate: "onInput",
   });
 
-  if (!fileds) {
+  if (!fields) {
     console.error("Form fields are not properly initialized");
     return <div>Error loading form fields.</div>;
   }
@@ -62,30 +63,33 @@ export default function CreateBannerRoute() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6">
+            {/* Banner Title */}
             <div className="flex flex-col gap-3">
               <Label>Title</Label>
               <Input
                 type="text"
                 placeholder="Enter title"
-                key={fileds?.title?.key}
-                name={fileds?.title?.name}
-                defaultValue={fileds?.title?.initialValue || ""}
+                key={fields?.title?.key}
+                name={fields?.title?.name || "title"}
+                defaultValue={fields?.title?.initialValue || ""}
               />
-              <p className="text-red-500">{fileds?.title?.errors}</p>
+              <p className="text-red-500">{fields?.title?.errors?.[0]}</p>
             </div>
+
+            {/* Banner Image */}
             <div className="flex flex-col gap-3">
               <Label>Image</Label>
               <input
                 type="hidden"
                 value={image || ""}
-                key={fileds?.imageString?.key}
-                name={fileds?.imageString?.name}
+                key={fields?.imageString?.key}
+                name={fields?.imageString?.name || "imageString"}
               />
               {image ? (
                 <div className="flex items-center gap-5">
                   <Image
                     src={image}
-                    alt="image"
+                    alt="Uploaded Image"
                     width={200}
                     height={200}
                     className="w-[200px] h-[200px] rounded-md"
@@ -95,7 +99,7 @@ export default function CreateBannerRoute() {
                 <UploadButton
                   endpoint={"imageUploader"}
                   onClientUploadComplete={(res) => {
-                    if (res && res[0]?.url) {
+                    if (res?.[0]?.url) {
                       setImage(res[0].url);
                     }
                   }}
@@ -104,7 +108,7 @@ export default function CreateBannerRoute() {
                   }}
                 />
               )}
-              <p className="text-red-500">{fileds?.imageString?.errors}</p>
+              <p className="text-red-500">{fields?.imageString?.errors?.[0]}</p>
             </div>
           </div>
         </CardContent>
