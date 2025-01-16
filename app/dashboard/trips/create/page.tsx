@@ -30,31 +30,28 @@ import React, { useActionState } from "react";
 export const dynamic = "force-dynamic"; // Prevents pre-rendering errors
 
 export default function CreateTripRoute() {
-  const [lastResult, action] = useActionState(createTrip, undefined);
-  console.log("Last Result:", lastResult); // Debugging API response
+  const [lastResult, action] = useActionState(createTrip, {});
+  console.log("Last Result:", lastResult || "No data");
 
   const [form, fields] = useForm({
     lastResult,
-    onValidate: ({ formData }) => {
-      return parseWithZod(formData, {
-        schema: tripSchema,
-      });
-    },
+    onValidate: ({ formData }) =>
+      parseWithZod(formData, { schema: tripSchema }),
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
 
   const [selectedType, setSelectedType] = React.useState(
-    fields?.type?.initialValue || ""
+    () => fields?.type?.initialValue || ""
   );
 
-  if (!fields) return <p>Loading...</p>; // Prevents rendering errors
+  if (!fields) return <p>Loading...</p>; // Prevent rendering errors
 
   return (
     <form id={form.id} onSubmit={form.onSubmit} action={action}>
       <div className="flex items-center gap-5">
-        <Button variant={"outline"} size={"icon"} asChild>
-          <Link href={"/dashboard/trips"}>
+        <Button variant="outline" size="icon" asChild>
+          <Link href="/dashboard/trips">
             <ChevronLeft className="size-5" />
           </Link>
         </Button>
@@ -67,7 +64,6 @@ export default function CreateTripRoute() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6">
-            {/* Trip Title */}
             <div className="flex flex-col gap-3">
               <Label>Trip Title</Label>
               <Input
@@ -75,12 +71,11 @@ export default function CreateTripRoute() {
                 defaultValue={fields?.title?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">
-                {fields?.title?.errors?.[0]}
-              </p>
+              {fields?.title?.errors?.[0] && (
+                <p className="text-sm text-red-500">{fields.title.errors[0]}</p>
+              )}
             </div>
 
-            {/* Trip Type */}
             <div className="flex flex-col gap-3">
               <Label>Type</Label>
               <Select
@@ -96,12 +91,11 @@ export default function CreateTripRoute() {
                   <SelectItem value="Departure">Departure</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-sm text-red-500">
-                {fields?.type?.errors?.[0]}
-              </p>
+              {fields?.type?.errors?.[0] && (
+                <p className="text-sm text-red-500">{fields.type.errors[0]}</p>
+              )}
             </div>
 
-            {/* Trip Date */}
             <div className="flex flex-col gap-3">
               <Label>Date</Label>
               <Input
@@ -110,12 +104,11 @@ export default function CreateTripRoute() {
                 defaultValue={fields?.date?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">
-                {fields?.date?.errors?.[0]}
-              </p>
+              {fields?.date?.errors?.[0] && (
+                <p className="text-sm text-red-500">{fields.date.errors[0]}</p>
+              )}
             </div>
 
-            {/* Trip Time */}
             <div className="flex flex-col gap-3">
               <Label>Time</Label>
               <Input
@@ -124,9 +117,9 @@ export default function CreateTripRoute() {
                 defaultValue={fields?.time?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">
-                {fields?.time?.errors?.[0]}
-              </p>
+              {fields?.time?.errors?.[0] && (
+                <p className="text-sm text-red-500">{fields.time.errors[0]}</p>
+              )}
             </div>
           </div>
         </CardContent>
