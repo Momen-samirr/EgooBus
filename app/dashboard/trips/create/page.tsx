@@ -29,6 +29,7 @@ import React, { useActionState } from "react";
 
 export default function CreateTripRoute() {
   const [lastResult, action] = useActionState(createTrip, undefined);
+  console.log("Last Result:", lastResult); // Debugging API response
 
   const [form, fields] = useForm({
     lastResult,
@@ -42,8 +43,10 @@ export default function CreateTripRoute() {
   });
 
   const [selectedType, setSelectedType] = React.useState(
-    fields.type?.initialValue || ""
+    fields?.type?.initialValue || ""
   );
+
+  if (!fields) return <p>Loading...</p>; // Prevents rendering errors
 
   return (
     <form id={form.id} onSubmit={form.onSubmit} action={action}>
@@ -66,18 +69,20 @@ export default function CreateTripRoute() {
             <div className="flex flex-col gap-3">
               <Label>Trip Title</Label>
               <Input
-                name={fields.title?.name || ""}
-                defaultValue={fields.title?.initialValue || ""}
+                name={fields?.title?.name || "title"}
+                defaultValue={fields?.title?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">{fields.title?.errors}</p>
+              <p className="text-sm text-red-500">
+                {fields?.title?.errors?.[0]}
+              </p>
             </div>
 
             {/* Trip Type */}
             <div className="flex flex-col gap-3">
               <Label>Type</Label>
               <Select
-                name={fields.type?.name || ""}
+                name={fields?.type?.name || "type"}
                 value={selectedType}
                 onValueChange={setSelectedType}
               >
@@ -90,7 +95,7 @@ export default function CreateTripRoute() {
                 </SelectContent>
               </Select>
               <p className="text-sm text-red-500">
-                {fields.type?.errors?.[0] || ""}
+                {fields?.type?.errors?.[0]}
               </p>
             </div>
 
@@ -99,11 +104,13 @@ export default function CreateTripRoute() {
               <Label>Date</Label>
               <Input
                 type="date"
-                name={fields.date?.name || ""}
-                defaultValue={fields.date?.initialValue || ""}
+                name={fields?.date?.name || "date"}
+                defaultValue={fields?.date?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">{fields.date?.errors}</p>
+              <p className="text-sm text-red-500">
+                {fields?.date?.errors?.[0]}
+              </p>
             </div>
 
             {/* Trip Time */}
@@ -111,11 +118,13 @@ export default function CreateTripRoute() {
               <Label>Time</Label>
               <Input
                 type="time"
-                name={fields.time?.name || ""}
-                defaultValue={fields.time?.initialValue || ""}
+                name={fields?.time?.name || "time"}
+                defaultValue={fields?.time?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">{fields.time?.errors}</p>
+              <p className="text-sm text-red-500">
+                {fields?.time?.errors?.[0]}
+              </p>
             </div>
           </div>
         </CardContent>
