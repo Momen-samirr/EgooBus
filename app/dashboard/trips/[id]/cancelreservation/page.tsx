@@ -1,5 +1,6 @@
 import { cancelReservation } from "@/app/actions";
 import SubmitButtons from "@/app/components/dashboard/submitButtons";
+import prisma from "@/app/lib/db";
 import {
   Card,
   CardDescription,
@@ -8,36 +9,34 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
-import prisma from "@/app/lib/db";
 
 interface PageProps {
-  params: { id: string };
+  params: { id: string }; // Automatically injected by the App Router
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.params!; // Extract the trip ID from params
+// This function is now asynchronous because it's a server component
+export default async function CancelReservationRoute({ params }: PageProps) {
+  const tripId = params.id;
 
-  // Example Prisma call (fetch trip or verify existence)
+  // Fetch trip details from the database (if needed)
   const trip = await prisma.trip.findUnique({
-    where: { id: String(id) },
+    where: { id: tripId },
   });
 
   if (!trip) {
-    return {
-      notFound: true, // Return 404 page if trip not found
-    };
+    return (
+      <div className="h-[80vh] w-full flex items-center justify-center">
+        <Card>
+          <CardHeader>
+            <CardTitle>Trip Not Found</CardTitle>
+            <CardDescription>
+              We couldn’t find the trip you’re trying to cancel.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
   }
-
-  return {
-    props: {
-      params: { id },
-    },
-  };
-};
-
-export default function CancelReservationRoute({ params }: PageProps) {
-  const tripId = params.id;
 
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
