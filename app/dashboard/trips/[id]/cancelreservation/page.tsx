@@ -10,13 +10,14 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-// Define the props type for the async function
-interface PageProps {
-  params: { id: string }; // params object injected by the App Router
-}
+type paramsType = Promise<{ id: string }>;
 
-export default async function CancelReservationRoute({ params }: PageProps) {
-  const tripId = params.id; // Extract trip ID from the params
+export default async function CancelReservationRoute({
+  params,
+}: {
+  params: paramsType;
+}) {
+  const { id: tripId } = await params; // Extract trip ID from the resolved promise
 
   // Fetch trip details from the database (optional, for validation)
   const trip = await prisma.trip.findUnique({
