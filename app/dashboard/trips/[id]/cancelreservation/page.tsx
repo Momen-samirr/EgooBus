@@ -10,20 +10,12 @@ import {
 import Link from "next/link";
 
 interface PageProps {
-  params: { id: string } | Promise<{ id: string }>;
+  params: { id: string }; // Ensure params is synchronous
 }
 
-export default function CancelReservationRoute({ params }: PageProps) {
-  let tripId = "";
-
-  // Handle both synchronous and Promise-based params
-  if (params instanceof Promise) {
-    params.then((resolvedParams) => {
-      tripId = resolvedParams.id;
-    });
-  } else {
-    tripId = params.id;
-  }
+export default async function CancelReservationRoute({ params }: PageProps) {
+  // Resolve the trip ID directly if async logic is needed
+  const tripId = params.id;
 
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
