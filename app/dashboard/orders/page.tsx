@@ -1,23 +1,24 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
 
 export default function OrdersPage() {
   return (
     <>
-      <Card>
+      <div>Soon</div>
+      {/* <Card>
         <CardHeader className="px-7">
           <CardTitle>Orders</CardTitle>
           <CardDescription>Card Description</CardDescription>
@@ -49,7 +50,7 @@ export default function OrdersPage() {
             </TableBody>
           </Table>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 }
