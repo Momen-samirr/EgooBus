@@ -27,6 +27,8 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React, { useActionState } from "react";
 
+export const dynamic = "force-dynamic"; // Prevents pre-rendering errors
+
 export default function CreateTripRoute() {
   const [lastResult, action] = useActionState(createTrip, undefined);
   console.log("Last Result:", lastResult); // Debugging API response
