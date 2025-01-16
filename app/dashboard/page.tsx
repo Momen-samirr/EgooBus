@@ -20,7 +20,7 @@ export default function Dashboard() {
       <div className="grid gap-5 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-10">
         <Card className="xl:col-span-2">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
+            <CardTitle>Card Titl</CardTitle>
           </CardHeader>
           <CardContent>
             <CardDescription>Based on 100 Charges</CardDescription>
