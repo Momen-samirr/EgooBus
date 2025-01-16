@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
+import prisma from "@/app/lib/db";
 
 interface PageProps {
   params: { id: string };
@@ -16,6 +17,18 @@ interface PageProps {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params!; // Extract the trip ID from params
+
+  // Example Prisma call (fetch trip or verify existence)
+  const trip = await prisma.trip.findUnique({
+    where: { id: String(id) },
+  });
+
+  if (!trip) {
+    return {
+      notFound: true, // Return 404 page if trip not found
+    };
+  }
+
   return {
     props: {
       params: { id },
