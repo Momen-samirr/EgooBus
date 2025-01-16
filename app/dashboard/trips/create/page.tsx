@@ -40,8 +40,9 @@ export default function CreateTripRoute() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+
   const [selectedType, setSelectedType] = React.useState(
-    fields.type.initialValue || ""
+    fields.type?.initialValue || ""
   );
 
   return (
@@ -61,20 +62,22 @@ export default function CreateTripRoute() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6">
+            {/* Trip Title */}
             <div className="flex flex-col gap-3">
               <Label>Trip Title</Label>
               <Input
-                key={fields.title.id}
-                name={fields.title.name}
-                defaultValue={fields.title.initialValue}
+                name={fields.title?.name || ""}
+                defaultValue={fields.title?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">{fields.title.errors}</p>
+              <p className="text-sm text-red-500">{fields.title?.errors}</p>
             </div>
+
+            {/* Trip Type */}
             <div className="flex flex-col gap-3">
               <Label>Type</Label>
               <Select
-                name={fields.type.name}
+                name={fields.type?.name || ""}
                 value={selectedType}
                 onValueChange={setSelectedType}
               >
@@ -87,32 +90,32 @@ export default function CreateTripRoute() {
                 </SelectContent>
               </Select>
               <p className="text-sm text-red-500">
-                {fields.type.errors?.[0] || ""}
+                {fields.type?.errors?.[0] || ""}
               </p>
-
-              <p className="text-sm text-red-500">{fields.type.errors}</p>
             </div>
+
+            {/* Trip Date */}
             <div className="flex flex-col gap-3">
               <Label>Date</Label>
               <Input
                 type="date"
-                key={fields.date.id}
-                name={fields.date.name}
-                defaultValue={fields.date.initialValue}
+                name={fields.date?.name || ""}
+                defaultValue={fields.date?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">{fields.date.errors}</p>
+              <p className="text-sm text-red-500">{fields.date?.errors}</p>
             </div>
+
+            {/* Trip Time */}
             <div className="flex flex-col gap-3">
               <Label>Time</Label>
               <Input
                 type="time"
-                key={fields.time.key}
-                name={fields.time.name}
-                defaultValue={fields.time.initialValue}
+                name={fields.time?.name || ""}
+                defaultValue={fields.time?.initialValue || ""}
                 className="w-full"
               />
-              <p className="text-sm text-red-500">{fields.time.errors}</p>
+              <p className="text-sm text-red-500">{fields.time?.errors}</p>
             </div>
           </div>
         </CardContent>
