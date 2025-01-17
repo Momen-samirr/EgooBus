@@ -1,32 +1,29 @@
 import { ProfilePage } from "@/app/components/storefront/EditAppNumber";
 import prisma from "@/app/lib/db";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { notFound } from "next/navigation";
 
-const getUserData = async (userId: string) => {
-  const userData = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
-  if (!userData) {
+const getUserData = async () => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  if (!user || user === null || !user.id) {
     return notFound();
   }
 
-  return userData;
+  const userDetails = await prisma.user.findUnique({
+    where: {
+      id: user.id,
+    },
+  });
+
+  return userDetails;
 };
 
-export default async function ProfileRoute({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const userId = params.id;
-  const userData = await getUserData(userId);
-
+export default async function ProfileRoute() {
+  const userDetails = await getUserData();
   return (
     <>
-      <ProfilePage data={userData} />
+      <ProfilePage userDetails={userDetails} />
     </>
   );
 }

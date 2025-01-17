@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 interface iAppprops {
-  data: {
+  userDetails: {
     id: string;
     email: string;
     firstName: string;
@@ -29,10 +29,10 @@ interface iAppprops {
     profileImage: string;
     applicationNumber: string;
     createAt: Date;
-  };
+  } | null;
 }
 
-export function ProfilePage({ data }: iAppprops) {
+export function ProfilePage({ userDetails }: iAppprops) {
   const { toast } = useToast();
   const [lastResult, action] = useActionState(
     updateApplicationNumber,
@@ -98,7 +98,7 @@ export function ProfilePage({ data }: iAppprops) {
                   placeholder="Enter Application Number"
                   key={fields.applicationNumber.key}
                   name={fields.applicationNumber.name}
-                  defaultValue={data.applicationNumber ?? ""}
+                  defaultValue={userDetails?.applicationNumber ?? ""}
                 />
                 <p className="text-red-500">
                   {fields.applicationNumber.errors}
