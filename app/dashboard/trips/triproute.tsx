@@ -61,6 +61,7 @@ type Trip = {
     firstName: string;
     lastName: string;
     profileImage: string;
+    applicationNumber: string;
   };
 };
 
@@ -278,6 +279,9 @@ export default function TripsRoute({ user }: { user: any }) {
                               </Avatar>
                               <p className="text-sm text-muted-foreground">
                                 {trip.User.firstName} {trip.User.lastName}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {trip.User.applicationNumber}
                               </p>
                             </DialogHeader>
                           </DialogContent>
