@@ -10,14 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import Link from "next/link";
 
 interface iAppProps {
   name: string;
   email: string;
+  userId: string;
   profileImage: string;
 }
 
-export function UserDropdown({ name, email, profileImage }: iAppProps) {
+export function UserDropdown({ name, email, userId, profileImage }: iAppProps) {
   return (
     <Dialog>
       <DropdownMenu>
@@ -37,6 +39,9 @@ export function UserDropdown({ name, email, profileImage }: iAppProps) {
             </p>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href={`/profile/${userId}`}>Profile</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <LogoutLink>Logout</LogoutLink>
           </DropdownMenuItem>

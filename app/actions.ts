@@ -2,7 +2,12 @@
 
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { parseWithZod } from "@conform-to/zod";
-import { bannerSchema, productSchema, tripSchema } from "./lib/zodSchema";
+import {
+  bannerSchema,
+  productSchema,
+  tripSchema,
+  userSchema,
+} from "./lib/zodSchema";
 import { redirect } from "next/navigation";
 import prisma from "./lib/db";
 export default async function createProduct(
@@ -310,4 +315,66 @@ export async function deleteAllTrips() {
       },
     },
   });
+}
+
+export async function updateApplicationNumber(
+  prevState: unknown,
+  formData: FormData
+) {
+  const { getUser } = getKindeServerSession();
+
+  const user = await getUser();
+
+  if (!user || !user.id) {
+    return { error: { general: ["Unauthorized. Please log in."] } };
+  }
+
+  const submission = parseWithZod(formData, {
+    schema: userSchema,
+  });
+
+  if (submission.status !== "success") {
+    return {
+      error: {
+        general: ["Invalid input. Please check the Application Number."],
+      },
+    };
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id },
+  });
+
+  if (!dbUser) {
+    return { error: { general: ["User not found."] } };
+  }
+
+  const existingApplicationNumber = await prisma.user.findFirst({
+    where: {
+      applicationNumber: submission.value.applicationNumber,
+    },
+  });
+
+  if (existingApplicationNumber) {
+    return { error: { general: ["Application number already exists."] } };
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { applicationNumber: submission.value.applicationNumber },
+    });
+
+    return {
+      success: true,
+      message: "Application Number updated successfully.",
+    };
+  } catch (error) {
+    console.error("Error updating application number:", error);
+    return {
+      error: {
+        general: ["Failed to update Application Number. Please try again."],
+      },
+    };
+  }
 }

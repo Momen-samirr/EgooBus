@@ -187,12 +187,12 @@ export default function TripsRoute({ user }: { user: any }) {
                   <TableHead>
                     <Input
                       type="text"
-                      placeholder="Filter Title"
+                      placeholder="Title"
                       value={filters.title}
                       onChange={(e) =>
                         handleFilterChange("title", e.target.value)
                       }
-                      className="border-none"
+                      className="border-none text-xs"
                     />
                   </TableHead>
                   <TableHead>
@@ -202,40 +202,40 @@ export default function TripsRoute({ user }: { user: any }) {
                       onChange={(e) =>
                         handleFilterChange("date", e.target.value)
                       }
-                      className="border-none"
+                      className="border-none text-xs"
                     />
                   </TableHead>
                   <TableHead>
                     <Input
                       type="text"
-                      placeholder="Filter Time"
+                      placeholder="Time"
                       value={filters.time}
                       onChange={(e) =>
                         handleFilterChange("time", e.target.value)
                       }
-                      className="border-none"
+                      className="border-none text-xs"
                     />
                   </TableHead>
                   <TableHead>
                     <Input
                       type="text"
-                      placeholder="Filter Type"
+                      placeholder="Type"
                       value={filters.type}
                       onChange={(e) =>
                         handleFilterChange("type", e.target.value)
                       }
-                      className="border-none"
+                      className="border-none text-xs"
                     />
                   </TableHead>
                   <TableHead>
                     <Input
                       type="text"
-                      placeholder="Filter Status"
+                      placeholder="Status"
                       value={filters.status}
                       onChange={(e) =>
                         handleFilterChange("status", e.target.value)
                       }
-                      className="border-none"
+                      className="border-none text-xs"
                     />
                   </TableHead>
                   <TableHead>Driver</TableHead>

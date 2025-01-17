@@ -16,6 +16,10 @@ export const bannerSchema = z.object({
   imageString: z.string(),
 });
 
+export const userSchema = z.object({
+  applicationNumber: z.string().min(1, "Application Number is required"),
+});
+
 export const tripSchema = z.object({
   title: z.string(),
   type: z.enum(["Attendance", "Departure"]),

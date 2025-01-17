@@ -13,6 +13,7 @@ model User {
   firstName       String
   lastName        String
   profileImage    String
+  applicationNumber   String @default("")
   trips   Trip[]
   createAt        DateTime @default(now())
 }
