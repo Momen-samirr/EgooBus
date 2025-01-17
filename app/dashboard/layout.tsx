@@ -85,7 +85,7 @@ export default async function DashboardLayout({
               <Avatar>
                 <AvatarImage
                   className="w-full h-full rounded-full object-cover"
-                  src="https://avatar.iran.liara.run/public/7"
+                  src={user.picture || "https://avatar.iran.liara.run/public/7"}
                   alt={`Avatar of ${user.given_name || "User"}`}
                 />
               </Avatar>

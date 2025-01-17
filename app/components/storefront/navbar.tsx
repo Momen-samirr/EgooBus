@@ -16,10 +16,28 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import prisma from "@/app/lib/db";
+const getUserDatails = async () => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  if (!user || user === null || !user.id) {
+    return null;
+  }
+  const userDatils = await prisma.user.findUnique({
+    where: {
+      id: user.id,
+    },
+  });
+
+  return userDatils;
+};
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+
+  const userDatils = await getUserDatails();
+
   return (
     <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-5">
       <div className="flex items-center">
@@ -63,15 +81,17 @@ export async function Navbar() {
       <div className="flex items-center">
         {user ? (
           <>
-            <Link
-              href={"/dashboard"}
-              className=" relative group p-2 flex items-center mr-2"
-            >
-              <LayoutDashboard className=" h-6 w-6 text-gray-400 group-hover:text-gray-500" />
-              <span className="absolute -top-3.5 right-1 text-xs bg-transparent text-primary w-6 h-6 flex items-center justify-center rounded-full p-2">
-                New
-              </span>
-            </Link>
+            {userDatils?.applicationNumber && (
+              <Link
+                href={"/dashboard"}
+                className=" relative group p-2 flex items-center mr-2"
+              >
+                <LayoutDashboard className=" h-6 w-6 text-gray-400 group-hover:text-gray-500" />
+                <span className="absolute -top-3.5 right-1 text-xs bg-transparent text-primary w-6 h-6 flex items-center justify-center rounded-full p-2">
+                  New
+                </span>
+              </Link>
+            )}
             <UserDropdown
               name={user.given_name as string}
               email={user.email as string}
