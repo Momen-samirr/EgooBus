@@ -1,4 +1,11 @@
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import DashboardNavigation from "../components/dashboard/DashboardNavigation";
 import { Button } from "@/components/ui/button";
 import { MenuIcon } from "lucide-react";
@@ -23,17 +30,20 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  if (!user || user === null || !user.id) {
+  const user = await getUser().catch(() => null); // Gracefully handle potential errors
+
+  if (!user || !user.id) {
     return redirect(
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/"
         : "https://egoo-bus.vercel.app"
     );
   }
+
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
       <header className="sticky top-0 h-16 gap-6 flex items-center justify-between bg-white border-b">
+        {/* Desktop Navigation */}
         <nav className="hidden font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <DashboardNavigation />
         </nav>
@@ -43,27 +53,40 @@ export default async function DashboardLayout({
               variant="outline"
               size="icon"
               className="shrink-0 md:hidden"
+              aria-label="Open navigation menu"
             >
               <MenuIcon className="size-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side={"left"}>
+          <SheetContent side="left" aria-labelledby="sheet-navigation-title">
+            <SheetHeader>
+              <SheetTitle>Edit profile</SheetTitle>
+              <SheetDescription>
+                Make changes to your profile here. Click save when youre done.
+              </SheetDescription>
+            </SheetHeader>
+            <h2 id="sheet-navigation-title" className="sr-only">
+              Navigation Menu
+            </h2>
             <nav className="flex flex-col gap-6 font-medium">
               <DashboardNavigation />
             </nav>
           </SheetContent>
         </Sheet>
+
+        {/* User Dropdown Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant={"ghost"}
+              variant="ghost"
               className="relative w-10 h-10 rounded-full"
+              aria-label="Open user menu"
             >
               <Avatar>
                 <AvatarImage
                   className="w-full h-full rounded-full object-cover"
-                  src={"https://avatar.iran.liara.run/public/7"}
-                  alt="Image"
+                  src="https://avatar.iran.liara.run/public/7"
+                  alt={`Avatar of ${user.given_name || "User"}`}
                 />
               </Avatar>
             </Button>
@@ -83,6 +106,8 @@ export default async function DashboardLayout({
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
+
+      {/* Main Content */}
       <main className="my-5">{children}</main>
     </div>
   );

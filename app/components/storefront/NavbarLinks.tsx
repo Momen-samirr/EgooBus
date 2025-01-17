@@ -25,12 +25,12 @@ export const links = [
 
 export function NavbarLinks() {
   return (
-    <div className="hidden md:flex items-center justify-center gap-x-5 ml-5">
+    <>
       {links.map((link) => (
         <Link href={link.href} key={link.id} className="font-medium">
           {link.title}
         </Link>
       ))}
-    </div>
+    </>
   );
 }

@@ -5,9 +5,17 @@ import {
   LoginLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/server";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, MenuIcon } from "lucide-react";
 import { UserDropdown } from "./UserDropdown";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
@@ -20,7 +28,37 @@ export async function Navbar() {
             Egoo<span className="text-primary">Bus</span>
           </h1>
         </Link>
-        <NavbarLinks />
+        <nav className="hidden md:ml-3 md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+          <NavbarLinks />
+        </nav>
+      </div>
+      <div>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="shrink-0 md:hidden"
+              aria-label="Open navigation menu"
+            >
+              <MenuIcon className="size-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" aria-labelledby="sheet-navigation-title">
+            <SheetHeader>
+              <SheetTitle>Edit profile</SheetTitle>
+              <SheetDescription>
+                Make changes to your profile here. Click save when youre done.
+              </SheetDescription>
+            </SheetHeader>
+            <h2 id="sheet-navigation-title" className="sr-only">
+              Navigation Menu
+            </h2>
+            <nav className="flex flex-col gap-5 font-medium">
+              <NavbarLinks />
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
       <div className="flex items-center">
         {user ? (
@@ -43,7 +81,7 @@ export async function Navbar() {
             />
           </>
         ) : (
-          <div className="hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-2">
+          <div className=" md:flex md:flex-1 md:items-center md:justify-end md:space-x-2">
             <Button variant={"ghost"} asChild>
               <LoginLink>Login</LoginLink>
             </Button>
