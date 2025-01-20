@@ -114,7 +114,7 @@ export async function createBanner(prevState: unknown, formData: FormData) {
   const user = await getUser();
   console.log("user", user);
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
 
@@ -142,7 +142,7 @@ export async function deleteBanner(fromData: FormData) {
 
   const user = await getUser();
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
 
@@ -159,7 +159,7 @@ export async function createTrip(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
 
@@ -189,7 +189,7 @@ export async function reserveTrip(formData: FormData) {
 
   const user = await getUser();
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
 
@@ -241,7 +241,7 @@ export async function getTripDetails(formData: FormData) {
 
   const user = await getUser();
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
   const trip = await prisma.trip.findUnique({
@@ -267,7 +267,7 @@ export async function cancelReservation(formData: FormData) {
 
   const user = await getUser();
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
 
@@ -301,7 +301,7 @@ export async function deleteAllTrips() {
 
   const user = await getUser();
 
-  if (!user || user === null || !user.id) {
+  if (!user || !user.id) {
     return redirect("/");
   }
 
@@ -362,7 +362,9 @@ export async function updateApplicationNumber(
   try {
     await prisma.user.update({
       where: { id: user.id },
-      data: { applicationNumber: submission.value.applicationNumber },
+      data: {
+        applicationNumber: submission.value.applicationNumber,
+      },
     });
 
     return {

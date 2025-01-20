@@ -28,6 +28,18 @@ import { MoreHorizontalIcon, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+const getUserData = async () => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  const dbUser = await prisma.user.findUnique({
+    where: {
+      id: user?.id,
+    },
+  });
+  return dbUser;
+};
+
 export default async function BannersPage() {
   // Fetch data directly within the component
   const data = await prisma.banner.findMany({
@@ -35,12 +47,10 @@ export default async function BannersPage() {
       createdAt: "desc",
     },
   });
-  const { getUser } = getKindeServerSession();
-
-  const user = await getUser();
+  const dbUser = await getUserData();
   return (
     <>
-      {user?.email === "mow78433@gmail.com" && (
+      {dbUser?.role === "admin" && (
         <div className="flex items-center justify-end">
           <Button asChild>
             <Link href={"/dashboard/banners/create"}>
@@ -87,7 +97,7 @@ export default async function BannersPage() {
                       <DropdownMenuContent>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        {user?.email === "mow78433@gmail.com" && (
+                        {dbUser?.role === "admin" && (
                           <DropdownMenuItem asChild>
                             <Link
                               href={`/dashboard/banners/${banner.id}/delete`}

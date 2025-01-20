@@ -17,7 +17,8 @@ export const bannerSchema = z.object({
 });
 
 export const userSchema = z.object({
-  applicationNumber: z.string().min(1, "Application Number is required"),
+  applicationNumber: z.string().min(11, "Application Number is required"),
+  role: z.enum(["admin", "driver", "user"]).default("user"),
 });
 
 export const tripSchema = z.object({

@@ -14,6 +14,7 @@ model User {
   lastName        String
   profileImage    String
   applicationNumber   String @default("")
+  role roleEnum @default(user)
   trips   Trip[]
   createAt        DateTime @default(now())
 }
@@ -70,4 +71,10 @@ enum tripTypeEnum {
 enum tripStatusEnum {
   Available
   Reserved
+}
+
+enum roleEnum {
+  admin
+  driver
+  user
 }

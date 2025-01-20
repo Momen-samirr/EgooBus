@@ -19,6 +19,7 @@ import {
 import prisma from "@/app/lib/db";
 const getUserDatails = async () => {
   const { getUser } = getKindeServerSession();
+
   const user = await getUser();
   if (!user || user === null || !user.id) {
     return null;
@@ -37,6 +38,8 @@ export async function Navbar() {
   const user = await getUser();
 
   const userDatils = await getUserDatails();
+
+  console.log("userDatils", userDatils);
 
   return (
     <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-5">
@@ -81,7 +84,7 @@ export async function Navbar() {
       <div className="flex items-center">
         {user ? (
           <>
-            {userDatils?.applicationNumber && (
+            {userDatils?.role == "admin" || userDatils?.role == "driver" ? (
               <Link
                 href={"/dashboard"}
                 className=" relative group p-2 flex items-center mr-2"
@@ -91,7 +94,7 @@ export async function Navbar() {
                   New
                 </span>
               </Link>
-            )}
+            ) : null}
             <UserDropdown
               name={user.given_name as string}
               email={user.email as string}

@@ -126,9 +126,11 @@ export default function TripsRoute({ user }: { user: any }) {
     fetchTrips();
   }, []);
 
+  console.log("checkUser", user);
+
   return (
     <>
-      {user.email == "mow78433@gmail.com" && (
+      {user?.role == "admin" && (
         <div>
           <div className="flex items-center justify-end">
             <Button asChild>

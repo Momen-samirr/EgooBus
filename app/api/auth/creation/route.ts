@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   const { getUser } = getKindeServerSession();
+
   const user = await getUser();
 
   if (!user || user === null || !user.id) {

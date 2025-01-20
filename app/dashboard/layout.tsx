@@ -23,6 +23,7 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
+import prisma from "../lib/db";
 
 export default async function DashboardLayout({
   children,
@@ -32,7 +33,21 @@ export default async function DashboardLayout({
   const { getUser } = getKindeServerSession();
   const user = await getUser().catch(() => null); // Gracefully handle potential errors
 
-  if (!user || !user.id) {
+  if (!user) {
+    return redirect(
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/"
+        : "https://egoo-bus.vercel.app"
+    );
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: {
+      id: user.id,
+    },
+  });
+
+  if (dbUser?.role === "user") {
     return redirect(
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/"
