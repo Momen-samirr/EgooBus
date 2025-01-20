@@ -28,6 +28,8 @@ import { MoreHorizontalIcon, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 const getUserData = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
