@@ -1,6 +1,7 @@
 import CreateTrip from "@/app/components/dashboard/CreateTrip";
 import prisma from "@/app/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+export const dynamic = "force-dynamic"; // Ensure dynamic rendering
 const getUserData = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();

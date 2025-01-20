@@ -98,7 +98,6 @@ export default function CreateTrip({ data }: iAppprops) {
                 <p className="text-sm text-red-500">{fields.title.errors[0]}</p>
               )}
             </div>
-
             <div className="flex flex-col gap-3">
               <Label>Type</Label>
               <Select
