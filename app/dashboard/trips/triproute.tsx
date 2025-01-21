@@ -184,7 +184,7 @@ export default function TripsRoute({ user }: { user: any }) {
           {trips.length === 0 ? (
             <p>No trips found for the selected date.</p>
           ) : (
-            <Table>
+            <Table className="table-auto">
               <TableHeader className="border-b bg-muted rounded-lg">
                 <TableRow>
                   <TableHead>
@@ -241,13 +241,22 @@ export default function TripsRoute({ user }: { user: any }) {
                       className="border-none text-xs"
                     />
                   </TableHead>
-                  <TableHead>Driver</TableHead>
+                  {<TableHead>Driver</TableHead>}
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredTrips.map((trip) => (
-                  <TableRow key={trip.id}>
+                  <TableRow
+                    key={trip.id}
+                    className={`${
+                      user?.role == "driver" &&
+                      trip.status === "Reserved" &&
+                      trip.userId !== user.id
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
                     <TableCell className="font-medium">{trip.title}</TableCell>
                     <TableCell className="font-medium">
                       {new Intl.DateTimeFormat("en-US").format(
@@ -267,9 +276,7 @@ export default function TripsRoute({ user }: { user: any }) {
                           </DialogTrigger>
                           <DialogContent className="flex flex-col items-center gap-3">
                             <DialogHeader className="flex flex-col items-center space-y-3">
-                              <DialogTitle>
-                                Are you absolutely sure?
-                              </DialogTitle>
+                              <DialogTitle>View Driver</DialogTitle>
                               <Avatar className="w-20 h-20 flex items-center justify-center">
                                 <AvatarImage
                                   src={trip.User.profileImage}
