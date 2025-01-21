@@ -186,11 +186,10 @@ export async function createTrip(prevState: unknown, formData: FormData) {
 
 export async function reserveTrip(formData: FormData) {
   const { getUser } = getKindeServerSession();
-
   const user = await getUser();
 
   if (!user || !user.id) {
-    return redirect("/");
+    throw new Error("You need to be logged in to reserve a trip.");
   }
 
   const tripId = formData.get("tripId") as string;
@@ -200,7 +199,7 @@ export async function reserveTrip(formData: FormData) {
   });
 
   if (!tripToReserve) {
-    throw new Error("Trip not found");
+    throw new Error("Trip not found.");
   }
 
   const userTripsOnSameDate = await prisma.trip.findMany({
@@ -216,24 +215,40 @@ export async function reserveTrip(formData: FormData) {
         ),
       },
     },
+    orderBy: {
+      time: "asc",
+    },
   });
 
-  if (userTripsOnSameDate.length >= 3) {
-    return redirect("/dashboard");
+  for (const userTrip of userTripsOnSameDate) {
+    const tripTime = new Date(
+      `${tripToReserve.date.toISOString().split("T")[0]}T${tripToReserve.time}`
+    );
+    const userTripTime = new Date(
+      `${userTrip.date.toISOString().split("T")[0]}T${userTrip.time}`
+    );
+
+    const timeDifference =
+      Math.abs(tripTime.getTime() - userTripTime.getTime()) / (1000 * 60); // difference in minutes
+    if (timeDifference < 40) {
+      throw new Error("Cannot book trips with less than a 40-minute gap.");
+    }
+  }
+
+  if (userTripsOnSameDate.length > 2) {
+    throw new Error("You cannot reserve more than 3 trips on the same day.");
   }
 
   // Reserve the trip
   await prisma.trip.update({
-    where: {
-      id: tripId,
-    },
+    where: { id: tripId },
     data: {
       status: "Reserved",
       userId: user.id,
     },
   });
 
-  return redirect("/dashboard/trips");
+  return { success: true };
 }
 
 export async function getTripDetails(formData: FormData) {

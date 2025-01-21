@@ -20,6 +20,26 @@ export default function ReservationRoute({ params }: { params: Params }) {
   const tripId = resolvedParams.id; // Extract the trip ID
   const { toast } = useToast();
 
+  const handleReservation = async (formData: FormData) => {
+    try {
+      await reserveTrip(formData);
+
+      toast({
+        title: "Success",
+        description: "You have successfully reserved the trip.",
+      });
+      window.location.href = "/dashboard/trips";
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description:
+          error.message || "Something went wrong while reserving the trip.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card>
@@ -39,18 +59,9 @@ export default function ReservationRoute({ params }: { params: Params }) {
 
           {/* Reservation Form */}
           <div className="flex flex-col gap-3">
-            <form action={reserveTrip}>
+            <form action={(formData: FormData) => handleReservation(formData)}>
               <input type="hidden" name="tripId" value={tripId} />
-              <SubmitButtons
-                text="Reserve"
-                variant="default"
-                onClick={() => {
-                  toast({
-                    title: "Trip Reserved",
-                    description: "You have successfully reserved this trip.",
-                  });
-                }}
-              />
+              <SubmitButtons text="Reserve" variant="default" />
             </form>
           </div>
         </CardFooter>
